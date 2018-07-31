@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImGui.NET.SampleProgram", "ImGui.NET.SampleProgram\ImGui.NET.SampleProgram.csproj", "{0FBA4057-7708-4FCC-B0D2-D049E647DC5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadgerEdit", "BadgerEdit\BadgerEdit.csproj", "{4E3CB2AA-9E33-434F-B673-B17E3D395D8E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FBA4057-7708-4FCC-B0D2-D049E647DC5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FBA4057-7708-4FCC-B0D2-D049E647DC5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FBA4057-7708-4FCC-B0D2-D049E647DC5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FBA4057-7708-4FCC-B0D2-D049E647DC5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E3CB2AA-9E33-434F-B673-B17E3D395D8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E3CB2AA-9E33-434F-B673-B17E3D395D8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E3CB2AA-9E33-434F-B673-B17E3D395D8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E3CB2AA-9E33-434F-B673-B17E3D395D8E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {63ABF67F-09BB-4D0B-A3AD-DA1659941D8F}
+	EndGlobalSection
+EndGlobal
