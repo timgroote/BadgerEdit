@@ -103,22 +103,43 @@ namespace BadgerEdit
             IO io = ImGui.GetIO();
             
             var charSize = ImGui.GetTextSize("F");
-//            io.WantTextInput = true;
-//            io.WantCaptureKeyboard = true;
 
             var contentSize = ImGui.GetWindowContentRegionMax();
             var drawList = ImGui.GetOverlayDrawList();
 
             Vector2 cursorScreenPos = ImGui.GetCursorScreenPos();
-
+            
             float scrollX = ImGuiNative.igGetScrollX();
             float scrollY = ImGuiNative.igGetScrollY();
 
             // first visible line
             int lineNo = (int)Math.Floor(scrollY / (Fontsize+ lineSpacing));
-            
             //last visible line
             var lineMax = Math.Max(0, Math.Min(Badger.Lines.Count - 1, lineNo + Math.Floor(scrollY + contentSize.Y) / (Fontsize + lineSpacing)));
+
+            if (Badger.UpdateScreenPosition)
+            {
+                if (Badger.CaretPosition.Y > lineMax)
+                {
+                    int distance = (int) (Math.Floor(lineMax - Badger.CaretPosition.Y) * (Fontsize + lineSpacing));
+                    //scroll down till we can see it
+                    ImGuiNative.igSetScrollY(ImGuiNative.igGetScrollY() - distance);
+                }
+
+                if (Badger.CaretPosition.Y < lineNo)
+                {
+                    int distance = (int)(Math.Floor((double) (lineNo - Badger.CaretPosition.Y)) * (Fontsize + lineSpacing));
+                    //scroll up till we can see it
+                    ImGuiNative.igSetScrollY(ImGuiNative.igGetScrollY() - distance);
+                }
+
+                //recalculate scroll positions for text rendering.
+                scrollY = ImGuiNative.igGetScrollY();
+                lineNo = (int)Math.Floor(scrollY / (Fontsize + lineSpacing));
+                lineMax = Math.Max(0, Math.Min(Badger.Lines.Count - 1, lineNo + Math.Floor(scrollY + contentSize.Y) / (Fontsize + lineSpacing)));
+
+                Badger.UpdateScreenPosition = false;
+            }
 
             if (Badger.Lines.Any())
             {
@@ -141,10 +162,7 @@ namespace BadgerEdit
                         drawList.AddRectFilled(lineStartScreenPos, new Vector2(lineStartScreenPos.X - Fontsize + contentSize.X, lineStartScreenPos.Y + Fontsize), _palette[PaletteIndex.CurrentLineFill], 1, 1);
                         drawList.AddRect(lineStartScreenPos, new Vector2(lineStartScreenPos.X -Fontsize + contentSize.X, lineStartScreenPos.Y + Fontsize), _palette[PaletteIndex.CurrentLineEdge], 1, 1,1);
                     }
-
-                    //IntVector LineStartCoord = new IntVector(lineNo, 0);
-                    //IntVector LineEndCoord = new IntVector(lineNo, line.Count);
-
+                    
                     //render line number
                     drawList.AddText(new Vector2(lineStartScreenPos.X, lineStartScreenPos.Y), lineNo.ToString(), _palette[PaletteIndex.LineNumber]);
 

@@ -156,9 +156,11 @@ namespace BadgerEdit
                 //Console.Out.WriteLine("lose selection");
                 resetSelection();
             }
-            //Console.Out.WriteLine("anchor : " + _selectionAnchor.AsString());
-            //Console.Out.WriteLine("Selection : " + Selection?.AsString() ?? "NULL");
+            UpdateScreenPosition = true;
         }
+
+        public bool UpdateScreenPosition { get; set; }
+
         #endregion
 
         public void SelectAll()
