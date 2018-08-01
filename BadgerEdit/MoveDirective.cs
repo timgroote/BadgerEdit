@@ -92,7 +92,7 @@ namespace BadgerEdit
             public override IntVector Execute(List<Line> lines,IntVector pos)
             {
                 pos.Y = lines.Count;
-                pos.X = lines[lines.Count].Count;
+                pos.X = lines[lines.Count-1].Count;
 
                 return pos;
             }
@@ -163,6 +163,5 @@ namespace BadgerEdit
                 return pos;
             }
         }
-
     }
 }

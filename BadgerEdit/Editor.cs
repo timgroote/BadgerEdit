@@ -56,7 +56,7 @@ namespace BadgerEdit
             }
         }
 
-        public Line CurrentLine => Lines[CaretPosition.Y];
+        public Line CurrentLine => Lines[Math.Min(Lines.Count-1, CaretPosition.Y)];
         public int LineNo => CaretPosition.Y;
         public int ColNo => CaretPosition.X;
 

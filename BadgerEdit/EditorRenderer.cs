@@ -122,6 +122,7 @@ namespace BadgerEdit
                 if (Badger.CaretPosition.Y > lineMax)
                 {
                     int distance = (int) (Math.Floor(lineMax - Badger.CaretPosition.Y) * (Fontsize + lineSpacing));
+
                     //scroll down till we can see it
                     ImGuiNative.igSetScrollY(ImGuiNative.igGetScrollY() - distance);
                 }
