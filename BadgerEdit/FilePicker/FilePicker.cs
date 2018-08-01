@@ -34,14 +34,18 @@ namespace BadgerEdit.FilePicker
             }
         }
 
+        protected Func<FileInfo, bool> OnSelect { get; set; }
+
+
         public FilePicker()
         {
             CurrentDirectory = new DirectoryInfo(".");
         }
 
-        public void Show(FilePickerMode mode)
+        public void Show(FilePickerMode mode, Func<FileInfo, bool> f = null)
         {
             CurrentDirectory = new DirectoryInfo(".");
+            OnSelect = f;
             SelectedFile = null;
             Mode = mode;
             Open = true;
@@ -147,6 +151,7 @@ namespace BadgerEdit.FilePicker
         private void Selectfile(FileInfo fl)
         {
             SelectedFile = fl;
+            OnSelect?.Invoke(fl);
             Open = false;
         }
     }

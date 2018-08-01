@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using BadgerEdit.FilePicker;
@@ -45,13 +46,13 @@ namespace BadgerEdit
                 {
                     if (ImGui.MenuItem("Open"))
                     {
-                        fp.Show(FilePickerMode.Open);
+                        fp.Show(FilePickerMode.Open, LoadFile);
                     }
 
                     ImGui.Separator();
                     if (ImGui.MenuItem("Save"))
                     {
-                        fp.Show(FilePickerMode.Save);
+                        fp.Show(FilePickerMode.Save, SaveFile);
                     }
 
                     ImGui.EndMenu();
@@ -64,6 +65,33 @@ namespace BadgerEdit
             
             RenderWindowContents();
             ImGui.EndWindow();
+        }
+
+        private bool SaveFile(FileInfo fileInfo)
+        {
+            try
+            {
+                Badger.SaveTo(fileInfo);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            
+        }
+
+        private bool LoadFile(FileInfo fileInfo)
+        {
+            try
+            {
+                Badger.LoadFrom(fileInfo);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         private unsafe void RenderWindowContents()

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using ImGuiNET;
 
 namespace BadgerEdit
@@ -258,6 +260,26 @@ namespace BadgerEdit
             if(!String.IsNullOrEmpty(trail))
                 CurrentLine.Concatenate(new Line(trail));
 
+        }
+
+        public void SaveTo(FileInfo fileInfo)
+        {
+            string output = GetAllText();
+            File.WriteAllText(fileInfo.FullName, output, Encoding.UTF8);
+        }
+
+        //todo : this has to cram the entire file into memory. it'd be nicer if we streamed it.
+        private string GetAllText()
+        {
+            return String.Join("", Lines.SelectMany(g => g.ToString() + '\n'));
+        }
+
+        public void LoadFrom(FileInfo fileInfo)
+        {
+            string flContents = File.ReadAllText(fileInfo.FullName);
+            Lines = new List<Line>() {new Line()};
+            CaretPosition = new IntVector(0,0);
+            InsertText(flContents);
         }
     }
 }

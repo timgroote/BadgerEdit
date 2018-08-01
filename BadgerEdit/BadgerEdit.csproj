@@ -12,6 +12,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="deps\cimgui\linux-x64\cimgui.so" />
+    <None Remove="deps\cimgui\osx-x64\cimgui.dylib" />
+    <None Remove="deps\cimgui\win-x64\cimgui.dll" />
     <None Remove="fonts\Android101.ttf" />
     <None Remove="fonts\Basscrw.ttf" />
     <None Remove="fonts\Hack-Bold.ttf" />
@@ -24,14 +27,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\deps\cimgui\linux-x64\cimgui.so" Link="cimgui.so">
-      <PackagePath>runtimes/linux-x64/native</PackagePath>
-      <Pack>true</Pack>
+    <Content Include="deps\cimgui\linux-x64\cimgui.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\deps\cimgui\osx-x64\cimgui.dylib" Link="cimgui.dylib">
-      <PackagePath>runtimes/osx-x64/native</PackagePath>
-      <Pack>true</Pack>
+    <Content Include="deps\cimgui\osx-x64\cimgui.dylib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="deps\cimgui\win-x64\cimgui.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="fonts\Android101.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -57,12 +64,6 @@
     <Content Include="fonts\SquaredDisplay.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\deps\cimgui\win-x64\cimgui.dll" Link="cimgui.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <ItemGroup>

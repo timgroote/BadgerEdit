@@ -6,7 +6,6 @@ namespace BadgerEdit
 {
     public class Line : List<Glyph>
     {
-
         public Line():base()
         {
             
@@ -49,11 +48,8 @@ namespace BadgerEdit
         {
             for (int k = count; k > 0; k--)
             {
-                RemoveAt((idx+k)-1);
+                RemoveAt(Math.Max(0,Math.Min(Count, idx+k)-1));
             }
-
-//            for(int i=0; i < count; i++)
-//                RemoveAt(idx+i);
         }
 
         public Line Concatenate(Line otherLine)
