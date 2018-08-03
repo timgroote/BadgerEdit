@@ -19,9 +19,10 @@ namespace BadgerEdit.FilePicker
         private byte[] FilenameInput = new byte[128];
         public FilePickerMode Mode = FilePickerMode.Open;
 
+        private DriveInfo SelectedDrive { get; set; }
+        private List<DriveInfo> VisibleDrives { get; set; }
         private FileInfo SelectedFile;
         private List<FileInfo> VisibleFiles { get; set; }
-
         private List<DirectoryInfo> VisibleDirectories { get; set; }
 
         private DirectoryInfo _currentDirectory { get; set; }
@@ -40,6 +41,7 @@ namespace BadgerEdit.FilePicker
         public FilePicker()
         {
             CurrentDirectory = new DirectoryInfo(".");
+            SelectedDrive = new DriveInfo(CurrentDirectory.Root.FullName);
         }
 
         public void Show(FilePickerMode mode, Func<FileInfo, bool> f = null)
@@ -55,8 +57,31 @@ namespace BadgerEdit.FilePicker
 
         private void LoadVisiblePaths()
         {
-            VisibleDirectories = _currentDirectory.GetDirectories().ToList();
-            VisibleFiles = _currentDirectory.GetFiles().ToList();
+            VisibleDrives = DriveInfo.GetDrives().ToList();
+            try
+            { 
+                VisibleDirectories = _currentDirectory.GetDirectories().ToList();
+            }
+            catch(Exception e)
+            {
+                //security violation?
+                VisibleDirectories = new List<DirectoryInfo>();
+            }
+            try
+            { 
+                VisibleFiles = _currentDirectory.GetFiles().ToList();
+            }
+            catch(Exception e)
+            {
+                //security violation?
+                VisibleFiles = new List<FileInfo>();
+            }
+        }
+
+        public void GotoDrive(DriveInfo drv)
+        {
+            SelectedDrive = drv;
+            MoveTo(SelectedDrive.RootDirectory);
         }
 
         public void MoveTo(DirectoryInfo dir)
@@ -99,6 +124,21 @@ namespace BadgerEdit.FilePicker
                     Reset();
                 }
 
+
+                ImGui.PushStyleColor(ColorTarget.Button, new Vector4(0.4f, 0.4f, 0, 1));
+                foreach(var driveInfo in VisibleDrives)
+                {
+                    if(ImGui.Button(driveInfo.Name))
+                    {
+                        GotoDrive(driveInfo);
+                    }
+
+                    if (VisibleDrives.IndexOf(driveInfo) < VisibleDrives.Count - 1)
+                    {
+                        ImGui.SameLine();
+                    }
+                }
+                ImGui.PopStyleColor();
 
                 ImGui.PushStyleColor(ColorTarget.Button, new Vector4(1,0,0,1));
 

@@ -3,3 +3,7 @@ BadgerEdit/bin/
 ImGui.NET.SampleProgram/obj/
 BadgerEdit/obj/project.assets.json
 BadgerEdit/obj/
+.vs/ImGui.NET/v15/.suo
+.vs/ImGui.NET/v15/Server/sqlite3/storage.ide
+.vs/ImGui.NET/v15/Server/sqlite3/storage.ide-shm
+.vs/ImGui.NET/v15/Server/sqlite3/storage.ide-wal
