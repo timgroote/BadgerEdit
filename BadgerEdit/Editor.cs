@@ -227,24 +227,30 @@ namespace BadgerEdit
             }
         }
 
-        private void InsertText(string clipText)
+        private void InsertText(string clipText, bool clearFirst = false)
         {
-            string[] linesToInsert = clipText.Split('\n');
 
-            int lnIndex = 0;
+
+            string[] linesToInsert = clipText.Split('\n');
+            
+            if(clearFirst)
+            {
+                Lines = linesToInsert.Select(n => new Line(n)).ToList();
+                return;
+            }
 
             string trail = "";
 
             foreach (string ln in linesToInsert)
             {
-                if (lnIndex == 0)
+                if (ln == linesToInsert.First())
                 {
                     //pick up trail from current line in case that ends up on a different line later.
                     trail = CurrentLine.GetText(CaretPosition.X);
                     CurrentLine.RemoveGlyphs(CaretPosition.X, trail.Length);
                     //insert at current line
                     CurrentLine.Concatenate(new Line(ln));
-                    for(int i=0; i < ln.Length; i++)
+                    for(int i=0; i < ln.Length-2; i++)
                         Move(MoveDirective.Right);
                 }
                 else
@@ -255,7 +261,6 @@ namespace BadgerEdit
                     Move(MoveDirective.Down);
                     Move(MoveDirective.End);
                 }
-                lnIndex++;
             }
 
             //append trail to current position if it exists.
@@ -279,9 +284,8 @@ namespace BadgerEdit
         public void LoadFrom(FileInfo fileInfo)
         {
             string flContents = File.ReadAllText(fileInfo.FullName);
-            Lines = new List<Line>() {new Line()};
             CaretPosition = new IntVector(0,0);
-            InsertText(flContents);
+            InsertText(flContents, true);
         }
     }
 }
