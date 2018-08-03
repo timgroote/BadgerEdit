@@ -194,7 +194,15 @@ namespace BadgerEdit
                 {
                     editor.Paste();
                 }
-                
+                if (ImGui.IsKeyPressed(ImGui.GetKeyIndex(GuiKey.PageUp)))
+                {
+                    editor.Move(MoveDirective.PageUp, io.ShiftPressed, Renderer.FirstVisibleLine, Renderer.LastVisibleLine);
+                }
+                if (ImGui.IsKeyPressed(ImGui.GetKeyIndex(GuiKey.PageDown)))
+                {
+                    editor.Move(MoveDirective.PageDown, io.ShiftPressed, Renderer.FirstVisibleLine, Renderer.LastVisibleLine);
+                }
+
                 _nativeWindow.ProcessEvents();
 
                 DateTime afterFrameTime = DateTime.UtcNow;

@@ -26,6 +26,28 @@ namespace BadgerEdit
         private Font customFont = null;
         private bool isOpened = true;
 
+        private float state_scrolly;
+        private Vector2 state_windowContentRegionMax;
+
+        public int FirstVisibleLine
+        {
+            get
+            {
+                // first visible line
+                return (int)Math.Floor(state_scrolly / (Fontsize + lineSpacing));
+            }
+        }
+
+        public int LastVisibleLine
+        {
+            get
+            {
+                //last visible line
+                return (int)Math.Max(0, Math.Min(Badger.Lines.Count - 1, FirstVisibleLine + Math.Floor(state_scrolly + state_windowContentRegionMax.Y) / (Fontsize + lineSpacing)));
+
+            }
+        }
+
 
         public EditorRenderer(NativeWindow nw, Editor badger, Palette p = null)
         {
@@ -111,6 +133,10 @@ namespace BadgerEdit
             
             float scrollX = ImGuiNative.igGetScrollX();
             float scrollY = ImGuiNative.igGetScrollY();
+
+            //update unfortunate state variables :(
+            state_scrolly = scrollY;
+            state_windowContentRegionMax = contentSize;
 
             // first visible line
             int lineNo = (int)Math.Floor(scrollY / (Fontsize+ lineSpacing));

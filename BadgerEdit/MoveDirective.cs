@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BadgerEdit
 {
     public abstract class MoveDirective
     {
-        public abstract IntVector Execute(List<Line> lines, IntVector pos);
+        public abstract IntVector Execute(List<Line> lines, IntVector pos, params object[] parameters);
 
         public static MoveDirective Up = new UpClass();
         public static MoveDirective Down = new DownClass();
@@ -17,10 +18,12 @@ namespace BadgerEdit
         public static MoveDirective EndOfWord = new EndOfWordClass();
         public static MoveDirective StartOfDocument = new StartOfDocumentClass();
         public static MoveDirective EndOfDocument = new EndOfDocumentClass();
+        public static MoveDirective PageUp = new PageUpClass();
+        public static MoveDirective PageDown = new PageDownClass();
 
         public class UpClass : MoveDirective
         {
-            public override IntVector Execute(List<Line> lines, IntVector pos)
+            public override IntVector Execute(List<Line> lines, IntVector pos, params object[] parameters)
             {
                 if (pos.Y <= 0)
                     return pos;
@@ -34,7 +37,7 @@ namespace BadgerEdit
         }
         public class DownClass : MoveDirective
         {
-            public override IntVector Execute(List<Line> lines,IntVector pos)
+            public override IntVector Execute(List<Line> lines, IntVector pos, params object[] parameters)
             {
                 if (pos.Y >= lines.Count || pos.Y +1 >= lines.Count)
                     return pos;
@@ -49,7 +52,7 @@ namespace BadgerEdit
         }
         public class LeftClass : MoveDirective
         {
-            public override IntVector Execute(List<Line> lines,IntVector pos)
+            public override IntVector Execute(List<Line> lines, IntVector pos, params object[] parameters)
             {
                 if (pos.X <= 0)
                 {
@@ -63,7 +66,7 @@ namespace BadgerEdit
         }
         public class RightClass : MoveDirective
         {
-            public override IntVector Execute(List<Line> lines,IntVector pos)
+            public override IntVector Execute(List<Line> lines, IntVector pos, params object[] parameters)
             {
                 var line = lines[pos.Y];
 
@@ -80,7 +83,7 @@ namespace BadgerEdit
 
         public class StartOfDocumentClass : MoveDirective
         {
-            public override IntVector Execute(List<Line> lines,IntVector pos)
+            public override IntVector Execute(List<Line> lines, IntVector pos, params object[] parameters)
             {
                 pos.X = 0;
                 pos.Y = 0;
@@ -89,7 +92,7 @@ namespace BadgerEdit
         }
         public class EndOfDocumentClass : MoveDirective
         {
-            public override IntVector Execute(List<Line> lines,IntVector pos)
+            public override IntVector Execute(List<Line> lines, IntVector pos, params object[] parameters)
             {
                 pos.Y = lines.Count;
                 pos.X = lines[lines.Count-1].Count;
@@ -99,7 +102,7 @@ namespace BadgerEdit
         }
         public class HomeClass : MoveDirective
         {
-            public override IntVector Execute(List<Line> lines,IntVector pos)
+            public override IntVector Execute(List<Line> lines, IntVector pos, params object[] parameters)
             {
                 pos.X = 0;
                 return pos;
@@ -107,7 +110,7 @@ namespace BadgerEdit
         }
         public class EndClass : MoveDirective
         {
-            public override IntVector Execute(List<Line> lines,IntVector pos)
+            public override IntVector Execute(List<Line> lines, IntVector pos, params object[] parameters)
             {
                 var line = lines[pos.Y];
                 pos.X = line.Count;
@@ -117,7 +120,7 @@ namespace BadgerEdit
 
         public class StartOfWordClass : MoveDirective
         {
-            public override IntVector Execute(List<Line> lines, IntVector pos)
+            public override IntVector Execute(List<Line> lines, IntVector pos, params object[] parameters)
             {
                 var line = lines[pos.Y];
                 if (line.Count == 0)
@@ -139,9 +142,91 @@ namespace BadgerEdit
                 return pos;
             }
         }
+
+        public class PageUpClass : MoveDirective
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="lines"></param>
+            /// <param name="pos"></param>
+            /// <param name="parameters">
+            /// First parameter : integer : index of first visible line
+            /// Second parameter : integer : index of the last visible line
+            /// </param>
+            /// <returns></returns>
+            public override IntVector Execute(List<Line> lines, IntVector pos, params object[] parameters) {
+
+                if(parameters.Length < 2)
+                {
+                    throw new ArgumentException("please pass two INT arguments; index of first and last line visible");
+                }
+
+                if(parameters.ToList().Any(p => p is int == false))
+                {
+                    throw new ArgumentException("pass only integers.");
+                }
+
+                int firstLine = (int)parameters[0];
+                int lastLine = (int)parameters[1];
+
+                if (pos.Y == firstLine)
+                {
+                    pos.Y = Math.Max(0, pos.Y - Math.Abs(lastLine - firstLine));
+                    return pos;
+                }
+                else
+                {
+                    pos.Y = firstLine;
+                    return pos;
+                }
+            }
+        }
+
+        public class PageDownClass : MoveDirective
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="lines"></param>
+            /// <param name="pos"></param>
+            /// <param name="parameters">
+            /// First parameter : integer : index of first visible line
+            /// Second parameter : integer : index of the last visible line
+            /// </param>
+            /// <returns></returns>
+            public override IntVector Execute(List<Line> lines, IntVector pos, params object[] parameters)
+            {
+
+                if (parameters.Length < 2)
+                {
+                    throw new ArgumentException("please pass two INT arguments; index of first and last line visible");
+                }
+
+                if (parameters.ToList().Any(p => p is int == false))
+                {
+                    throw new ArgumentException("pass only integers.");
+                }
+
+                int firstLine = (int)parameters[0];
+                int lastLine = (int)parameters[1];
+
+                if (pos.Y == lastLine)
+                {
+                    pos.Y = Math.Min(lines.Count-1, pos.Y + Math.Abs(lastLine - firstLine));
+                    return pos;
+                }
+                else
+                {
+                    pos.Y = lastLine;
+                    return pos;
+                }
+            }
+        }
+
         public class EndOfWordClass : MoveDirective
         {
-            public override IntVector Execute(List<Line> lines, IntVector pos)
+            public override IntVector Execute(List<Line> lines, IntVector pos, params object[] parameters)
             {
                 var line = lines[pos.Y];
                 if (line.Count == 0)

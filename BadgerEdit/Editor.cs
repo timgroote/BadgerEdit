@@ -147,9 +147,9 @@ namespace BadgerEdit
             resetSelection();
         }
         
-        public void Move(MoveDirective directive, bool maintainSelection = false)
+        public void Move(MoveDirective directive, bool maintainSelection = false, params object[] moveParameters)
         {
-            directive.Execute(Lines, CaretPosition);
+            directive.Execute(Lines, CaretPosition, moveParameters);
             //Console.Out.WriteLine("caret : " + CaretPosition.AsString());
             if (!maintainSelection)
             {
